@@ -1,3 +1,4 @@
+import 'package:d2/other/color.dart';
 import 'package:flutter/material.dart';
 
 class DoctorCardPage extends StatelessWidget {
@@ -13,11 +14,12 @@ class DoctorCardPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: AppColors.text),
         title: Text(
           categoryName,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppColors.text),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -72,9 +74,9 @@ class DoctorCardPage extends StatelessWidget {
                           children: [
                             ElevatedButton(
                               onPressed: () {},
-                              child: Text("Contact Clinic"),
+                              child: Text("Contact Clinic",style: TextStyle(color: AppColors.text),),
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue),
+                                  backgroundColor: AppColors.primary),
                             ),
                             OutlinedButton(
                               onPressed: () {},
