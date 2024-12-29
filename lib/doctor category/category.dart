@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../other/color.dart';
-class CategoryPage extends StatelessWidget {
+class DoctorCardPage extends StatelessWidget {
   final String? category;
 
-  CategoryPage({this.category}); // Make it nullable
+  DoctorCardPage({this.category}); // Make it nullable
 
   @override
   Widget build(BuildContext context) {
-    // Ensure category is not null before using it
-    var categoryName = category ?? "Default Category"; // Provide default if null
+    var categoryName = category ?? "Doctors";
 
-    var data = _getCategoryData(categoryName);
+    var data = _getDoctorData(categoryName);
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: AppColors.text),
-        backgroundColor: AppColors.primary,
         title: Text(
           categoryName,
-          style: TextStyle(color: AppColors.text),
+          style: TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -33,14 +30,60 @@ class CategoryPage extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              // Display data related to the selected category
               for (var item in data)
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    title: Text(item['name'] ?? 'No Name'),
-                    subtitle: Text(item['specialty'] ?? 'No Specialty'),
-                    leading: Icon(Icons.person),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(item['image'] ?? ''),
+                              radius: 30,
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['name'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(item['specialty'] ?? ''),
+                                SizedBox(height: 5),
+                                Text("Experience: ${item['experience']} years"),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text("Location: ${item['location']}"),
+                        Text("Consultation Fee: ₹${item['fee']}"),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text("Contact Clinic"),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue),
+                            ),
+                            OutlinedButton(
+                              onPressed: () {},
+                              child: Text("Book Clinic Visit"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
@@ -50,30 +93,24 @@ class CategoryPage extends StatelessWidget {
     );
   }
 
-  List<Map<String, String>> _getCategoryData(String category) {
-    switch (category) {
-      case "General Physician":
-        return [
-          {"name": "Dr. John Doe", "specialty": "General Medicine"},
-          {"name": "Dr. Jane Smith", "specialty": "Family Medicine"},
-        ];
-      case "Skin & Hair":
-        return [
-          {"name": "Dr. Emma Brown", "specialty": "Dermatology"},
-          {"name": "Dr. Liam White", "specialty": "Cosmetic Dermatology"},
-        ];
-      case "Women's Health":
-        return [
-          {"name": "Dr. Olivia Green", "specialty": "Gynecology"},
-          {"name": "Dr. Isabella Blue", "specialty": "Obstetrics"},
-        ];
-      case "Dental Care":
-        return [
-          {"name": "Dr. Sophie Black", "specialty": "Orthodontics"},
-          {"name": "Dr. Samuel Gray", "specialty": "Pediatric Dentistry"},
-        ];
-      default:
-        return [];
-    }
+  List<Map<String, dynamic>> _getDoctorData(String category) {
+    return [
+      {
+        "name": "Dr. Venkatesh Babu G M",
+        "specialty": "Psychiatrist",
+        "experience": 18,
+        "location": "HSR Layout",
+        "fee": 1200,
+        "image": "https://via.placeholder.com/150",
+      },
+      {
+        "name": "Dr. Shobha Krishna",
+        "specialty": "Psychiatrist",
+        "experience": 32,
+        "location": "Jayanagar",
+        "fee": 1500,
+        "image": "https://via.placeholder.com/150",
+      },
+    ];
   }
 }

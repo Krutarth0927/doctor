@@ -38,7 +38,7 @@ class AllDoctorCategoriesPage extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigate to CategoryPage with the category title
-        Get.to(() => CategoryPage(category: title));
+        Get.to(() => DoctorCardPage(category: title));
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

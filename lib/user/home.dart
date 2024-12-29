@@ -182,25 +182,25 @@ class HomePage extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               children: [
                 _buildCategory("General Physician", Icons.medical_services, onTap: () {
-                  Get.to(() => CategoryPage(category: "General Physician"));
+                  Get.to(() => DoctorCardPage(category: "General Physician"));
                 }),
                 _buildCategory("Skin & Hair", Icons.face, onTap: () {
-                  Get.to(() => CategoryPage(category: "Skin & Hair"));
+                  Get.to(() => DoctorCardPage(category: "Skin & Hair"));
                 }),
                 _buildCategory("Women's Health", Icons.female, onTap: () {
-                  Get.to(() => CategoryPage(category: "Women's Health"));
+                  Get.to(() => DoctorCardPage(category: "Women's Health"));
                 }),
                 _buildCategory("Dental Care", Icons.local_hospital, onTap: () {
-                  Get.to(() => CategoryPage(category: "Dental Care"));
+                  Get.to(() => DoctorCardPage(category: "Dental Care"));
                 }),
                 _buildCategory("Child Specialist", Icons.child_care, onTap: () {
-                  Get.to(() => CategoryPage(category: "Child Specialist"));
+                  Get.to(() => DoctorCardPage(category: "Child Specialist"));
                 }),
                 _buildCategory("Ear, Nose, Throat", Icons.hearing, onTap: () {
-                  Get.to(() => CategoryPage(category: "Ear, Nose, Throat"));
+                  Get.to(() => DoctorCardPage(category: "Ear, Nose, Throat"));
                 }),
                 _buildCategory("Mental Wellness", Icons.psychology, onTap: () {
-                  Get.to(() => CategoryPage(category: "Mental Wellness"));
+                  Get.to(() => DoctorCardPage(category: "Mental Wellness"));
                 }),
                 _buildCategory("more", Icons.more_horiz, onTap: () {
                   Get.to(() => AllDoctorCategoriesPage());
