@@ -1,16 +1,7 @@
-import 'package:d2/controller/menucontroller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 import '../other/color.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-
-
-
 
 class ReminderPage extends StatelessWidget {
-  final menucontroller controller = Get.put(menucontroller());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +45,10 @@ class ReminderPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => AddReminder());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddReminder()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -79,7 +73,6 @@ class ReminderPage extends StatelessWidget {
 }
 
 class AddReminder extends StatelessWidget {
-  final menucontroller controller = Get.put(menucontroller());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,15 +98,12 @@ class AddReminder extends StatelessWidget {
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
-                if (pickedTime != null) {
-                  controller.time.value = pickedTime.format(context);
-                }
+                // Handle selected time (optional logic can go here)
               },
             ),
             SizedBox(height: 16),
-            Obx(() => TextField(
+            TextField(
               readOnly: true,
-              controller: TextEditingController(text: controller.date.value),
               decoration: InputDecoration(
                 labelText: "Date",
                 hintText: "Select Date",
@@ -127,12 +117,9 @@ class AddReminder extends StatelessWidget {
                   firstDate: DateTime.now(),
                   lastDate: DateTime(2100),
                 );
-                if (pickedDate != null) {
-                  controller.date.value =
-                  "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-                }
+                // Handle selected date (optional logic can go here)
               },
-            )),
+            ),
             SizedBox(height: 16),
             TextField(
               maxLines: 3,
@@ -141,11 +128,12 @@ class AddReminder extends StatelessWidget {
                 hintText: "Enter reminder details",
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) => controller.description.value = value,
             ),
             SizedBox(height: 32),
             ElevatedButton(
-              onPressed: controller.saveReminder,
+              onPressed: () {
+                // Handle save reminder (optional logic can go here)
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 minimumSize: Size(double.infinity, 50),
@@ -161,61 +149,6 @@ class AddReminder extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class NotificationService {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
-  // Initialize Notification Service
-  static void initialize() {
-    // Initialize time zone database
-    tz.initializeTimeZones();
-
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
-
-    _notificationsPlugin.initialize(initializationSettings);
-  }
-
-  // Schedule Notification
-  static void scheduleNotification({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime scheduledTime,
-  }) async {
-    // Convert DateTime to TZDateTime for proper scheduling
-    final tz.TZDateTime scheduledTZDateTime = tz.TZDateTime.from(
-      scheduledTime,
-      tz.local,
-    );
-
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'reminder_channel_id', // Unique ID
-      'Reminder Notifications', // Channel Name
-      channelDescription: 'Channel for Reminder Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails notificationDetails =
-    NotificationDetails(android: androidDetails);
-
-    await _notificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledTZDateTime,
-      notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, // Updated parameter
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.wallClockTime,
     );
   }
 }

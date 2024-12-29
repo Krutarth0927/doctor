@@ -6,8 +6,7 @@ import 'package:get/get.dart';
 import 'menu/reminder.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  NotificationService.initialize();
+
   runApp(const MyApp());
 }
 
