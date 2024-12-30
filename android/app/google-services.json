@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "365442424779",
+    "project_id": "doctor-d2",
+    "storage_bucket": "doctor-d2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365442424779:android:02f109616e156a255c604e",
+        "android_client_info": {
+          "package_name": "com.example.d2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi--dqwvT_uqcXc88AzhpS42-A1u7Ech0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
