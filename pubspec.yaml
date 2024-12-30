@@ -41,7 +41,7 @@ dependencies:
   image_picker:
   flutter_local_notifications:
   intl:
-  firebase_core: ^3.9.0
+  firebase_core: ^2.19.0
 
 dev_dependencies:
   flutter_test:

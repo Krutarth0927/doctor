@@ -1,3 +1,4 @@
+import 'package:d2/otp/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:d2/other/color.dart';
@@ -57,7 +58,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => HomePage());
+                  Get.to(() => login());
                 },
                 child: Obx(() => AnimatedContainer(
                   duration: Duration(milliseconds: 300),
