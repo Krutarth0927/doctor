@@ -11,5 +11,8 @@ class AppColors {
   static const Color textSecondary = Color(0xFF757575); // Grey text
   static const Color text = Color(0xFFE8EAF6); // Grey text
   static const Color icon = Color(0xFFE8EAF6);
-  static const Color red = Color(0xFFD31515);// Grey text
+  static const Color red = Color(0xFFD31515);
+  static const Color orange = Color(0xFFD3841A);// Grey text
+  static const Color gray = Color(0xFFAAB3B4);
+  Color trans = Colors.transparent;
 }

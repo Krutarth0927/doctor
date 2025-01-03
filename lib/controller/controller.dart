@@ -1,5 +1,7 @@
 import 'package:d2/doctor%20category/allcategory.dart';
+import 'package:d2/doctor%20category/category.dart';
 import 'package:d2/menu/reminder.dart';
+import 'package:d2/user/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -63,6 +65,7 @@ class HomeController extends GetxController {
   void removeCategory(Map<String, dynamic> category) {
     doctorCategories.remove(category);
   }
+
 }
 
 

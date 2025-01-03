@@ -17,7 +17,7 @@ class AllDoctorCategoriesPage extends StatelessWidget {
           "All Doctor Categories",
           style: TextStyle(color: AppColors.text),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color:AppColors.text),
       ),
       body: Obx(() {
         // Obx listens to changes in the RxList
