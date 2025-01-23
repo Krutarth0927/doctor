@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:d2/other/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controller/usercontroller.dart';
+import 'package:http/http.dart'as http;
+
 class ProfileFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,15 +14,18 @@ class ProfileFormPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.primary, // Retain the primary background
-          iconTheme: IconThemeData(color: AppColors.text), // Set back arrow to white
-          title: Text(
+          iconTheme: const IconThemeData(
+              color: AppColors.text), // Set back arrow to white
+          title: const Text(
             "Profile Details",
-            style: TextStyle(color: AppColors.text), // Title text color set to white
+            style: TextStyle(
+                color: AppColors.text), // Title text color set to white
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: AppColors.text, // Indicator color as white
             labelColor: AppColors.text, // Active tab text color as white
-            unselectedLabelColor: AppColors.text, // Slightly dimmed for unselected tabs
+            unselectedLabelColor:
+                AppColors.text, // Slightly dimmed for unselected tabs
             tabs: [
               Tab(text: "Personal"),
               Tab(text: "Medical"),
@@ -39,83 +45,142 @@ class ProfileFormPage extends StatelessWidget {
   }
 }
 
-
 // PersonalForm with GetX
 class PersonalForm extends StatelessWidget {
-  final controller = Get.put(PersonalFormController());
+ // final controller = Get.put(PersonalFormController());
+ //
+ //  TextEditingController name= TextEditingController();
+ //  TextEditingController contactNumber= TextEditingController();
+ //  TextEditingController dob= TextEditingController();
+ //  TextEditingController bloodGroup= TextEditingController();
+ //  TextEditingController height= TextEditingController();
+ //  TextEditingController weight= TextEditingController();
+ //  TextEditingController gender= TextEditingController();
+ //  TextEditingController location= TextEditingController();
+ //
+ //  Future<void> insetred() async{
+ //    if(name.text != " "||contactNumber.text != " " || dob.text != " " ||bloodGroup.text != " " || height.text != " " || weight.text != " " || gender.text != " "  || location.text != "")
+ //    {
+ //      try{
+ //        String  uri ="http://localhost/doctor/insert_record.php ";
+ //        var  res = await http.post(Uri.parse(uri),body:{
+ //          "name" : name.text,
+ //          "contactNumber" : contactNumber.text,
+ //          "dob" : dob.text,
+ //          "bloodGroup" : bloodGroup.text,
+ //          "height" : height.text,
+ //          "weight" : weight.text,
+ //          "gender" : gender.text,
+ //          "location" : location.text,
+ //        });
+ //
+ //        var responce = jsonDecode(res.body);
+ //
+ //        if(responce["success"]=="true"){
+ //          print("recoder inserted");
+ //          name.text="";
+ //          contactNumber.text="";
+ //          dob.text="";
+ //          bloodGroup.text="";
+ //          height.text="";
+ //          weight.text="";
+ //          gender.text="";
+ //          location.text="";
+ //
+ //        }else{
+ //          print("some issuess");
+ //        }
+ //      }catch(e){
+ //        print(e);
+ //
+ //      }
+ //
+ //    }else{
+ //      print("please fill  all field ");
+ //    }
+ //  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                TextField(
-                  decoration: InputDecoration(labelText: "Name"),
-                  onChanged: (value) => controller.name.value = value,
-                ),
-                SizedBox(height: 10),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.photo),
-                  label: Text("Add Photo"),
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Contact Number"),
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) => controller.contactNumber.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Date of Birth"),
-                  onChanged: (value) => controller.dob.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Blood Group"),
-                  onChanged: (value) => controller.bloodGroup.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Height (cm)"),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => controller.height.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Weight (kg)"),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => controller.weight.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Gender"),
-                  onChanged: (value) => controller.gender.value = value,
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: "Location"),
-                  onChanged: (value) => controller.location.value = value,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.text,
+    return Scaffold(
+      appBar: AppBar(title: const Text("Personal Form")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(labelText: "Name"),
+                 //  controller: name,
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.photo),
+                    label: const Text("Add Photo"),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration:
+                    const InputDecoration(labelText: "Contact Number"),
+                    keyboardType: TextInputType.phone,
+                 //  controller: contactNumber,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration:
+                    const InputDecoration(labelText: "Date of Birth"),
+                 //  controller: dob,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration: const InputDecoration(labelText: "Blood Group"),
+              // controller: bloodGroup,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration:
+                    const InputDecoration(labelText: "Height (cm)"),
+                    keyboardType: TextInputType.number,
+               //  controller: height,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration: const InputDecoration(labelText: "Weight (kg)"),
+                    keyboardType: TextInputType.number,
+                //   controller: weight,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration: const InputDecoration(labelText: "Gender"),
+                   //controller: gender,
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration: const InputDecoration(labelText: "Location"),
+                //  controller: location,
+                  ),
+                ],
               ),
-              onPressed: controller.saveDetails,
-              child: Text("Confirm"),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.text,
+                ),
+                onPressed: (){
+                //  insetred();
+    },
+                child: const Text("Confirm"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -128,39 +193,45 @@ class MedicalForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           Expanded(
             child: ListView(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: "Allergies"),
+                  decoration: const InputDecoration(labelText: "Allergies"),
                   onChanged: (value) => controller.allergies.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Current Medications"),
-                  onChanged: (value) => controller.currentMedications.value = value,
+                  decoration:
+                      const InputDecoration(labelText: "Current Medications"),
+                  onChanged: (value) =>
+                      controller.currentMedications.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Past Medications"),
-                  onChanged: (value) => controller.pastMedications.value = value,
+                  decoration:
+                      const InputDecoration(labelText: "Past Medications"),
+                  onChanged: (value) =>
+                      controller.pastMedications.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Chronic Diseases"),
-                  onChanged: (value) => controller.chronicDiseases.value = value,
+                  decoration:
+                      const InputDecoration(labelText: "Chronic Diseases"),
+                  onChanged: (value) =>
+                      controller.chronicDiseases.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Surgeries"),
+                  decoration: const InputDecoration(labelText: "Surgeries"),
                   onChanged: (value) => controller.surgeries.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Injuries"),
+                  decoration: const InputDecoration(labelText: "Injuries"),
                   onChanged: (value) => controller.injuries.value = value,
                 ),
               ],
@@ -174,7 +245,7 @@ class MedicalForm extends StatelessWidget {
                 foregroundColor: AppColors.text,
               ),
               onPressed: controller.saveDetails,
-              child: Text("Confirm"),
+              child: const Text("Confirm"),
             ),
           ),
         ],
@@ -190,29 +261,33 @@ class LifestyleForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           Expanded(
             child: ListView(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: "Smoking Habit"),
+                  decoration: const InputDecoration(labelText: "Smoking Habit"),
                   onChanged: (value) => controller.smokingHabit.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Alcohol Consumption"),
-                  onChanged: (value) => controller.alcoholConsumption.value = value,
+                  decoration:
+                      const InputDecoration(labelText: "Alcohol Consumption"),
+                  onChanged: (value) =>
+                      controller.alcoholConsumption.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Food Preferences"),
-                  onChanged: (value) => controller.foodPreferences.value = value,
+                  decoration:
+                      const InputDecoration(labelText: "Food Preferences"),
+                  onChanged: (value) =>
+                      controller.foodPreferences.value = value,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
-                  decoration: InputDecoration(labelText: "Occupation"),
+                  decoration: const InputDecoration(labelText: "Occupation"),
                   onChanged: (value) => controller.occupation.value = value,
                 ),
               ],
@@ -226,7 +301,7 @@ class LifestyleForm extends StatelessWidget {
                 foregroundColor: AppColors.text,
               ),
               onPressed: controller.saveDetails,
-              child: Text("Confirm"),
+              child: const Text("Confirm"),
             ),
           ),
         ],
@@ -235,18 +310,18 @@ class LifestyleForm extends StatelessWidget {
   }
 }
 
-
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Profile")),
+      appBar: AppBar(title: const Text("Profile")),
       body: Center(
         child: CircleAvatar(
           radius: 30,
           backgroundColor: AppColors.primary,
           child: IconButton(
-            icon: Icon(Icons.account_circle, size: 50, color: Colors.white),
+            icon:
+                const Icon(Icons.account_circle, size: 50, color: AppColors.text),
             onPressed: () {
               Navigator.push(
                 context,

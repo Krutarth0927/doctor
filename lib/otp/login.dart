@@ -1,8 +1,7 @@
-import 'package:d2/bottom%20nevigation/nevigation.dart';
+import 'package:d2/bottomnav/bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:d2/other/color.dart';
-import 'package:d2/user/home.dart';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -27,14 +26,14 @@ class _LoginState extends State<login> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Mobile Number Enter",
           style: TextStyle(color: AppColors.text),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.text),
+          icon: const Icon(Icons.arrow_back, color: AppColors.text),
           onPressed: () {
             Get.back();
           },
@@ -48,7 +47,8 @@ class _LoginState extends State<login> {
             children: [
               Text(
                 "Enter your mobile number",
-                style: TextStyle(fontSize: size.width * 0.05, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: size.width * 0.05, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: size.height * 0.02),
               Row(
@@ -62,7 +62,7 @@ class _LoginState extends State<login> {
                       border: Border.all(color: AppColors.textPrimary),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
                         Text("+91"),
                         Icon(Icons.arrow_drop_down),
@@ -85,7 +85,7 @@ class _LoginState extends State<login> {
                 ],
               ),
               SizedBox(height: size.height * 0.03),
-              Center(
+              const Center(
                 child: Text(
                   "By continuing, you agree to our Terms & Conditions",
                   style: TextStyle(color: AppColors.textSecondary),
@@ -102,12 +102,15 @@ class _LoginState extends State<login> {
                   print("Phone Number: ${_phoneController.text}");
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => OTPScreen(phone: _phoneController.text)),
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            OTPScreen(phone: _phoneController.text)),
                   );
                 },
                 child: Text(
                   "Continue",
-                  style: TextStyle(color: AppColors.text, fontSize: size.width * 0.05),
+                  style: TextStyle(
+                      color: AppColors.text, fontSize: size.width * 0.05),
                 ),
               ),
             ],
@@ -122,7 +125,8 @@ class OTPScreen extends StatelessWidget {
   final String phone;
   OTPScreen({required this.phone});
 
-  final List<TextEditingController> _otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (index) => TextEditingController());
 
   // @override
   // void dispose() {
@@ -138,14 +142,14 @@ class OTPScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "OTP Screen",
           style: TextStyle(color: AppColors.text),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.text),
+          icon: const Icon(Icons.arrow_back, color: AppColors.text),
           onPressed: () {
             Get.back();
           },
@@ -159,7 +163,8 @@ class OTPScreen extends StatelessWidget {
             children: [
               Text(
                 "Enter the 6-digit OTP sent to",
-                style: TextStyle(fontSize: size.width * 0.05, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: size.width * 0.05, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: size.height * 0.02),
               Text(phone),
@@ -168,7 +173,7 @@ class OTPScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(
                   6,
-                      (index) => Container(
+                  (index) => Container(
                     width: size.width * 0.13,
                     height: size.width * 0.13,
                     decoration: BoxDecoration(
@@ -181,7 +186,7 @@ class OTPScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
                         maxLength: 1,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           counterText: "",
                           border: InputBorder.none,
                         ),
@@ -193,10 +198,10 @@ class OTPScreen extends StatelessWidget {
               SizedBox(height: size.height * 0.03),
               Row(
                 children: [
-                  Text("Didn't receive the code?"),
+                  const Text("Didn't receive the code?"),
                   TextButton(
                     onPressed: () {},
-                    child: Text("Resend"),
+                    child: const Text("Resend"),
                   ),
                 ],
               ),
@@ -207,13 +212,16 @@ class OTPScreen extends StatelessWidget {
                   minimumSize: Size(double.infinity, size.height * 0.05),
                 ),
                 onPressed: () {
-                  String otp = _otpControllers.map((controller) => controller.text).join();
+                  String otp = _otpControllers
+                      .map((controller) => controller.text)
+                      .join();
                   print("Entered OTP: $otp");
-                  Get.to(() => NavigationMenu());
+                  Get.to(() => bottomnav());
                 },
                 child: Text(
                   "Continue",
-                  style: TextStyle(color: AppColors.text, fontSize: size.width * 0.04),
+                  style: TextStyle(
+                      color: AppColors.text, fontSize: size.width * 0.04),
                 ),
               ),
             ],

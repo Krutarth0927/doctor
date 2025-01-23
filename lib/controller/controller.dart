@@ -1,12 +1,11 @@
 import 'package:d2/doctor%20category/allcategory.dart';
-import 'package:d2/doctor%20category/category.dart';
 import 'package:d2/menu/reminder.dart';
-import 'package:d2/user/home.dart';
+import 'package:d2/user%20profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  // Define any reactive state you want to manage
+
   RxBool isLoading = false.obs;
 
 
@@ -17,7 +16,7 @@ class HomeController extends GetxController {
   }
   // Example function to simulate an action (e.g., onTap behavior)
   void onProfileTapped() {
-    print("Profile tapped");
+   Get.to(()=>ProfileFormPage());
   }
 
   void onSettingsTapped() {
@@ -46,16 +45,18 @@ class HomeController extends GetxController {
   }
 
   RxList<Map<String, dynamic>> doctorCategories = [
-    {"title": "General Physician", "icon": Icons.medical_services},
-    {"title": "Skin & Hair", "icon": Icons.face},
-    {"title": "Women's Health", "icon": Icons.female},
-    {"title": "Dental Care", "icon": Icons.local_hospital},
-    {"title": "Child Specialist", "icon": Icons.child_care},
-    {"title": "Ear, Nose, Throat", "icon": Icons.hearing},
-    {"title": "Mental Wellness", "icon": Icons.psychology},
-    {"title": "Cardiology", "icon": Icons.favorite},
-    {"title": "Orthopedics", "icon": Icons.accessibility},
-  ].obs; // .obs makes the list reactive
+    {"title": "Dermatologist", "image": "assets/categories/Dermatologist.png"},
+    {"title": "Neurologist", "image": "assets/categories/Neurologist.png"},
+    {"title": "Gastroenterologist", "image": "assets/categories/Gastroenterologist.png"},
+    {"title": "Radiologist", "image": "assets/categories/Radiologist.png"},
+    {"title": "Psychiatrist", "image": "assets/categories/Psychiatrist.png"},
+    {"title": "Pediatrician", "image": "assets/categories/Pediatrician.png"},
+    {"title": "Orthopaedist", "image": "assets/categories/Orthopedist.png"},
+    {"title": "Pathology", "image": "assets/categories/Pathology.png"},
+    {"title": "Family Physicians", "image": "assets/categories/Family_Physicians.png"},
+    {"title": "Nephrologists", "image": "assets/categories/Nephrologist.png"},
+  ].obs;
+
 
   // You can also add methods to manage the categories if needed
   void addCategory(Map<String, dynamic> newCategory) {
@@ -65,6 +66,7 @@ class HomeController extends GetxController {
   void removeCategory(Map<String, dynamic> category) {
     doctorCategories.remove(category);
   }
+
 
 }
 

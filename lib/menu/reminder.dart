@@ -6,21 +6,21 @@ class ReminderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reminders", style: TextStyle(color: AppColors.text)),
+        title: const Text("Reminders", style: TextStyle(color: AppColors.text)),
         backgroundColor: AppColors.primary,
-        iconTheme: IconThemeData(color: AppColors.text),
+        iconTheme: const IconThemeData(color: AppColors.text),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Spacer(),
+          const Spacer(),
           Image.asset(
             'assets/reminder.png',
             height: 200,
           ),
-          SizedBox(height: 20),
-          Text(
+          const SizedBox(height: 20),
+          const Text(
             "You have no reminders.",
             style: TextStyle(
               fontSize: 18,
@@ -28,9 +28,9 @@ class ReminderPage extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
             child: Text(
               "Set a reminder for medicines, to drink enough water, or to take a break at work.",
               textAlign: TextAlign.center,
@@ -40,7 +40,7 @@ class ReminderPage extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ElevatedButton(
@@ -52,12 +52,12 @@ class ReminderPage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "Add a reminder",
                 style: TextStyle(
                   fontSize: 16,
@@ -77,9 +77,9 @@ class AddReminder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Reminder", style: TextStyle(color: AppColors.text)),
+        title: const Text("Add Reminder", style: TextStyle(color: AppColors.text)),
         backgroundColor: AppColors.primary,
-        iconTheme: IconThemeData(color: AppColors.text),
+        iconTheme: const IconThemeData(color: AppColors.text),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -87,7 +87,7 @@ class AddReminder extends StatelessWidget {
           children: [
             TextField(
               readOnly: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Time",
                 hintText: "Select Time",
                 border: OutlineInputBorder(),
@@ -101,10 +101,10 @@ class AddReminder extends StatelessWidget {
                 // Handle selected time (optional logic can go here)
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               readOnly: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Date",
                 hintText: "Select Date",
                 border: OutlineInputBorder(),
@@ -120,8 +120,8 @@ class AddReminder extends StatelessWidget {
                 // Handle selected date (optional logic can go here)
               },
             ),
-            SizedBox(height: 16),
-            TextField(
+            const SizedBox(height: 16),
+            const TextField(
               maxLines: 3,
               decoration: InputDecoration(
                 labelText: "Description",
@@ -129,19 +129,19 @@ class AddReminder extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
                 // Handle save reminder (optional logic can go here)
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "Save Reminder",
                 style: TextStyle(fontSize: 16, color: AppColors.text),
               ),
