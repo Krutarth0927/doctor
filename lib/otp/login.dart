@@ -1,3 +1,6 @@
+import 'package:d2/controller/AuthenticationReposetory.dart';
+import 'package:d2/controller/OtpController.dart';
+import 'package:d2/controller/PhoneController.dart';
 import 'package:d2/other/color.dart';
 import 'package:d2/user/home.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +82,9 @@ class _loginState extends State<login> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
+                Get.put(AuthenticationReposetory());
+                AuthenticationReposetory.instance.phoneAuthentication("+916359439942");
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => OTPScreen()),
@@ -94,6 +100,9 @@ class _loginState extends State<login> {
 }
 
 class OTPScreen extends StatelessWidget {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,6 +126,7 @@ class OTPScreen extends StatelessWidget {
               "Enter the 6-digit OTP sent to",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
+
             SizedBox(height: 10),
             Text("+919484776059"),
             SizedBox(height: 20),
@@ -163,6 +173,7 @@ class OTPScreen extends StatelessWidget {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
+                AuthenticationReposetory.instance.varifyOTP('');
                 Get.to(()=>HomePage());
               },
               child: Text("Continue",style: TextStyle(color: AppColors.text,fontSize: 20),),
