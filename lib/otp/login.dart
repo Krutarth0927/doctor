@@ -28,18 +28,14 @@ class _LoginState extends State<login> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "Mobile Number Enter",
           style: TextStyle(color: AppColors.text),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.text),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -102,7 +98,7 @@ class _LoginState extends State<login> {
                 ),
                 onPressed: () {
                   print("Phone Number: ${_phoneController.text}");
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (_) =>
@@ -110,6 +106,7 @@ class _LoginState extends State<login> {
                   );
                 },
                 child: Text(
+
                   "Continue",
                   style: TextStyle(
                       color: AppColors.text, fontSize: size.width * 0.05),
@@ -144,18 +141,14 @@ class OTPScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "OTP Screen",
           style: TextStyle(color: AppColors.text),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.text),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -218,7 +211,7 @@ class OTPScreen extends StatelessWidget {
                       .map((controller) => controller.text)
                       .join();
                   print("Entered OTP: $otp");
-                  Get.to(() => PersonalForm());
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
                 },
                 child: Text(
                   "Continue",

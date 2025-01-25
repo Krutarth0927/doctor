@@ -76,7 +76,7 @@ class _PersonalFormState extends State<PersonalForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Data saved successfully!")),
         );
-        Get.to(()=>bottomnav());
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
 
 
         // Clear fields
@@ -109,10 +109,7 @@ class _PersonalFormState extends State<PersonalForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () => Get.back(),
-          child: const Icon(Icons.arrow_back, color: AppColors.text),
-        ),
+
         backgroundColor: AppColors.primary,
         title: const Text(
           "Personal Form",

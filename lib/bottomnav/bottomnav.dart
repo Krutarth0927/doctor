@@ -34,6 +34,7 @@ class _BottomNavExampleState extends State<BottomNavExample> {
     doctorca(),
     // DoctorBookingPage(),
      Displayprofilescreen(),
+    Displayprofilescreen(),
 
   ];
 

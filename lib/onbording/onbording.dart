@@ -48,7 +48,8 @@ class SplashScreen extends StatelessWidget {
                       right: screenWidth * 0.2,
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(() =>  bottomnav());
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>login()));
+
                         },
                         child: Container(
                           height: screenHeight * 0.06,
