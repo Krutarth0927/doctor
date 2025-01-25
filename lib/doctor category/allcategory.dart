@@ -86,7 +86,7 @@ class AllDoctorCategoriesPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 5.0),
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => DoctorBookingPage(), arguments: {"title": title, "image": imagePath});
+                // Get.to(() => DoctorBookingPage(doctorId: '',), arguments: {"title": title, "image": imagePath});
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: AppColors.text, backgroundColor: AppColors.primary,

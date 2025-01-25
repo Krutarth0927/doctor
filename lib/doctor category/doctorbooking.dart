@@ -4,6 +4,11 @@ import 'package:intl/intl.dart';
 import '../other/color.dart';
 
 class DoctorBookingPage extends StatefulWidget {
+  final doctorId;
+
+  // Constructor to accept the doctor ID
+  DoctorBookingPage({required this.doctorId});
+
   @override
   _DoctorBookingPageState createState() => _DoctorBookingPageState();
 }
@@ -36,13 +41,13 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     "Jonathan Patterson": [],
   };
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Marsh Hospital',
-          style: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
+        title: Text('Doctor ID: ${widget.doctorId}',
+        style: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.text),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:d2/doctor%20category/AllDoctorsofHospital.dart';
 import 'package:d2/other/color.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,15 @@ class _doctorcaState extends State<doctorca> {
         "https://easydoc.clotheeo.in/apis/fetch_all_hospital.php";
     try {
       final response = await http.get(Uri.parse(apiUrl));
+
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['hospitals'] != null) {
+
+        if (data['data'] != null) {
           setState(() {
-            hospitals = data['hospitals']; // Assuming the API returns a 'hospitals' key
+            hospitals = data['data']; // Assuming the API returns a 'hospitals' key
+            print(hospitals);
             isLoading = false;
           });
         } else {
@@ -87,73 +92,80 @@ class _doctorcaState extends State<doctorca> {
           itemCount: hospitals.length,
           itemBuilder: (context, index) {
             final hospital = hospitals[index];
-            return Card(
-              margin: const EdgeInsets.symmetric(
-                  vertical: 8.0, horizontal: 10.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipOval(
-                      child: Image.network(
-                        hospital["image"] ?? '',
-                        height: 70,
-                        width: 70,
-                        fit: BoxFit.fill,
-                        errorBuilder:
-                            (context, error, stackTrace) =>
-                        const Icon(Icons.error, size: 70),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            hospital["name"] ?? "Unknown Hospital",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+            return InkWell(
+              onTap: (){
+                var id = hospital['ID'];
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>AllDoctorsofHospital(id: id)));
+
+              },
+              child: Card(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 10.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ClipOval(
+                      //   child: Image.network(
+                      //     hospital["image"] ?? '',
+                      //     height: 70,
+                      //     width: 70,
+                      //     fit: BoxFit.fill,
+                      //     errorBuilder:
+                      //         (context, error, stackTrace) =>
+                      //     const Icon(Icons.error, size: 70),
+                      //   ),
+                      // ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              hospital["name"] ?? "Unknown Hospital",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            hospital["type"] ?? "Unknown Type",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                            const SizedBox(height: 5),
+                            Text(
+                              hospital["type"] ?? "Unknown Type",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                color: Colors.orange,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                hospital["rating"]?.toString() ?? "N/A",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "${hospital["reviews"] ?? 0} reviews",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ],
+                            const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.orange,
+                                  size: 14,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  hospital["rating"]?.toString() ?? "N/A",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  "${hospital["reviews"] ?? 0} reviews",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );

@@ -32,8 +32,8 @@ class _BottomNavExampleState extends State<BottomNavExample> {
   final List<Widget> _pages = [
     HomePage(),
     doctorca(),
-    DoctorBookingPage(),
-    Displayprofilescreen(),
+    // DoctorBookingPage(),
+     Displayprofilescreen(),
 
   ];
 
