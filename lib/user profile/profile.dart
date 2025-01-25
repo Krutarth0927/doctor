@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:d2/bottomnav/bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,7 @@ class PersonalForm extends StatefulWidget {
 }
 
 class _PersonalFormState extends State<PersonalForm> {
-  File? _selectedImage;
+
   String? _selectedGender;
   DateTime? _selectedDateOfBirth;
 
@@ -28,14 +29,6 @@ class _PersonalFormState extends State<PersonalForm> {
   final TextEditingController gender = TextEditingController();
   final TextEditingController location = TextEditingController();
 
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
 
   Future<void> _pickDateOfBirth(BuildContext context) async {
     final pickedDate = await showDatePicker(
@@ -62,23 +55,27 @@ class _PersonalFormState extends State<PersonalForm> {
   Future<void> insertData() async {
     try {
       String uri = "https://easydoc.clotheeo.in/apis/insert_user.php";
-      var res = await http.post(Uri.parse(uri), body: {
-        "name": name.text,
-        "phone": contactNumber.text,
-        "dob": dob.text,
-        "blood_group": bloodGroup.text,
-        "height": height.text,
-        "weight": weight.text,
-        "gender": gender.text,
-        "location": location.text,
-      });
+      var res = await http.post(Uri.parse(uri), body: jsonEncode({
+
+        "name": name.text.toString(),
+        "phone": contactNumber.text.toString(),
+        "dob": dob.text.toString(),
+        "blood_group": bloodGroup.text.toString(),
+        "height": height.text.toString(),
+        "weight": weight.text.toString(),
+        "gender": gender.text.toString(),
+        "location": location.text.toString(),
+
+      })
+      );
 
       var response = jsonDecode(res.body);
-      if (response["success"] == "true") {
+      if (response["status"] == 201) {
         print("Record inserted successfully");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Data saved successfully!")),
         );
+        Get.to(()=>bottomnav());
         // Clear fields
         name.clear();
         contactNumber.clear();
@@ -89,7 +86,7 @@ class _PersonalFormState extends State<PersonalForm> {
         gender.clear();
         location.clear();
         setState(() {
-          _selectedImage = null;
+
           _selectedGender = null;
         });
       } else {
@@ -130,22 +127,7 @@ class _PersonalFormState extends State<PersonalForm> {
                     controller: name,
                     decoration: _inputDecoration("Name"),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.photo),
-                    label: const Text("Add Photo"),
-                  ),
-                  if (_selectedImage != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Image.file(
-                        _selectedImage!,
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                SizedBox(height: 10,),
                   TextField(
                     controller: contactNumber,
                     decoration: _inputDecoration("Contact Number"),

@@ -50,31 +50,31 @@ class PersonalFormController extends GetxController {
   //         snackPosition: SnackPosition.TOP);
   //   }
   // }
-}
-// MedicalFormController for managing medical details
-class MedicalFormController extends GetxController {
-  var allergies = ''.obs;
-  var currentMedications = ''.obs;
-  var pastMedications = ''.obs;
-  var chronicDiseases = ''.obs;
-  var surgeries = ''.obs;
-  var injuries = ''.obs;
-
-  void saveDetails() {
-    Get.snackbar("Success", "Medical details saved!",
-        snackPosition: SnackPosition.BOTTOM);
-  }
-}
-
-// LifestyleFormController for managing lifestyle details
-class LifestyleFormController extends GetxController {
-  var smokingHabit = ''.obs;
-  var alcoholConsumption = ''.obs;
-  var foodPreferences = ''.obs;
-  var occupation = ''.obs;
-
-  void saveDetails() {
-    Get.snackbar("Success", "Lifestyle details saved!",
-        snackPosition: SnackPosition.BOTTOM);
-  }
+// }
+// // MedicalFormController for managing medical details
+// class MedicalFormController extends GetxController {
+//   var allergies = ''.obs;
+//   var currentMedications = ''.obs;
+//   var pastMedications = ''.obs;
+//   var chronicDiseases = ''.obs;
+//   var surgeries = ''.obs;
+//   var injuries = ''.obs;
+//
+//   void saveDetails() {
+//     Get.snackbar("Success", "Medical details saved!",
+//         snackPosition: SnackPosition.BOTTOM);
+//   }
+// }
+//
+// // LifestyleFormController for managing lifestyle details
+// class LifestyleFormController extends GetxController {
+//   var smokingHabit = ''.obs;
+//   var alcoholConsumption = ''.obs;
+//   var foodPreferences = ''.obs;
+//   var occupation = ''.obs;
+//
+//   void saveDetails() {
+//     Get.snackbar("Success", "Lifestyle details saved!",
+//         snackPosition: SnackPosition.BOTTOM);
+//   }
 }
