@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 // Assuming this is defined elsewhere in your project
 import '../other/color.dart';
+import 'displayprofile screen.dart';
 
 
 class PersonalForm extends StatefulWidget {
@@ -76,6 +77,8 @@ class _PersonalFormState extends State<PersonalForm> {
           const SnackBar(content: Text("Data saved successfully!")),
         );
         Get.to(()=>bottomnav());
+
+
         // Clear fields
         name.clear();
         contactNumber.clear();
