@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/controller.dart';
 import '../doctor category/allcategory.dart';
 import '../doctor category/doctor.dart';
 import '../other/color.dart';
+import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> items = [
     {
       'image': 'assets/categories/Gastroenterologist.png', // Use the image asset path
@@ -76,6 +84,37 @@ class HomePage extends StatelessWidget {
       "image": "assets/hospital/1.jpg", // Replace with actual image path
     },
   ];
+
+  List<dynamic> hospitals = [];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHospitals();
+  }
+
+  Future<void> fetchHospitals() async {
+    const String apiUrl = "https://easydoc.clotheeo.in/apis/fetch_all_hospital.php";
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          hospitals = data['hospitals']; // Assuming the API returns a 'hospitals' key
+          isLoading = false;
+        });
+      } else {
+        throw Exception("Failed to load hospitals");
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching data: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

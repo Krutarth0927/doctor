@@ -1,239 +1,164 @@
+import 'dart:convert';
 import 'package:d2/other/color.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(doctorca());
 }
 
-class doctorca extends StatelessWidget {
+class doctorca extends StatefulWidget {
+  @override
+  State<doctorca> createState() => _doctorcaState();
+}
+
+class _doctorcaState extends State<doctorca> {
+  List<dynamic> hospitals = [];
+  bool isLoading = true;
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHospitals();
+  }
+
+  Future<void> fetchHospitals() async {
+    const String apiUrl =
+        "https://easydoc.clotheeo.in/apis/fetch_all_hospital.php";
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['hospitals'] != null) {
+          setState(() {
+            hospitals = data['hospitals']; // Assuming the API returns a 'hospitals' key
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            errorMessage = "No hospitals data available";
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          errorMessage = "Failed to load hospitals";
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = "Error fetching data: $e";
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.text,
-              )),
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          title: const Text(
-            'Health App',
-            style: TextStyle(
-              color: AppColors.text,
-              fontWeight: FontWeight.bold,
+          leading: InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: AppColors.text, // Assuming you have a white color for text
             ),
           ),
-        ),
-        body: const doctype(),
-      ),
-    );
-  }
-}
-
-class doctype extends StatefulWidget {
-  const doctype({super.key});
-
-  @override
-  State<doctype> createState() => _doctypeState();
-}
-
-class _doctypeState extends State<doctype> {
-  @override
-  Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SectionTitle(title: "Top Doctors"),
-            SizedBox(height: 8),
-            HorizontalCardList(
-              items: [
-                CardItem(
-                  title: "Dr. Drew Feig",
-                  subtitle: "⭐ 4.5",
-                  imageUrl: "assets/hospital/1.jpg",
-                ),
-                CardItem(
-                  title: "Dr.Avery Davis",
-                  subtitle: "⭐ 4.5",
-                  imageUrl: "assets/hospital/1.jpg",
-                ),
-                CardItem(
-                  title: "Dr. Mark Lee",
-                  subtitle: "⭐ 4.5",
-                  imageUrl: "assets/hospital/1.jpg",
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            SectionTitle(title: "Best Health Plans"),
-            SizedBox(height: 8),
-            SizedBox(
-              height: 165,
-              child: HorizontalImageCardList(
-                images: [
-                  "assets/hospital/3.jpg",
-                  "assets/hospital/3.jpg",
-                  "assets/hospital/3.jpg",
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SectionTitle extends StatelessWidget {
-  final String title;
-
-  const SectionTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+          backgroundColor: AppColors.primary, // Example primary color
+          title: Text(
+            "Top Hospitals",
+            style: TextStyle(color: AppColors.text), // Assuming you have white text color
           ),
         ),
-        const Text(
-          "Show All",
-          style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-}
-
-class HorizontalCardList extends StatelessWidget {
-  final List<CardItem> items;
-
-  const HorizontalCardList({required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return items[index];
-        },
-      ),
-    );
-  }
-}
-
-class CardItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String imageUrl;
-
-  const CardItem({
-    required this.title,
-    required this.subtitle,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.asset(
-                imageUrl,
-                height: 80,
-                width: double.infinity,
-                fit: BoxFit.cover,
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+            ? Center(child: Text(errorMessage))
+            : hospitals.isEmpty
+            ? const Center(child: Text("No hospitals available"))
+            : ListView.builder(
+          itemCount: hospitals.length,
+          itemBuilder: (context, index) {
+            final hospital = hospitals[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(
+                  vertical: 8.0, horizontal: 10.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            ),
-            if (title.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ClipOval(
+                      child: Image.network(
+                        hospital["image"] ?? '',
+                        height: 70,
+                        width: 70,
+                        fit: BoxFit.fill,
+                        errorBuilder:
+                            (context, error, stackTrace) =>
+                        const Icon(Icons.error, size: 70),
+                      ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 12),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            hospital["name"] ?? "Unknown Hospital",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            hospital["type"] ?? "Unknown Type",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.orange,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                hospital["rating"]?.toString() ?? "N/A",
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "${hospital["reviews"] ?? 0} reviews",
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ],
+            );
+          },
         ),
-      ),
-    );
-  }
-}
-
-class HorizontalImageCardList extends StatelessWidget {
-  final List<String> images;
-
-  const HorizontalImageCardList({required this.images});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: images.length,
-        itemBuilder: (context, index) {
-          return Container(
-            width: 120,
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  images[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }
