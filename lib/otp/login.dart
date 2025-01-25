@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:d2/other/color.dart';
 
+import '../user profile/profile.dart';
+
 class login extends StatefulWidget {
   const login({super.key});
 
@@ -216,7 +218,7 @@ class OTPScreen extends StatelessWidget {
                       .map((controller) => controller.text)
                       .join();
                   print("Entered OTP: $otp");
-                  Get.to(() => bottomnav());
+                  Get.to(() => PersonalForm());
                 },
                 child: Text(
                   "Continue",

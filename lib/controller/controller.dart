@@ -1,5 +1,6 @@
 import 'package:d2/doctor%20category/allcategory.dart';
 import 'package:d2/menu/reminder.dart';
+import 'package:d2/user%20profile/displayprofile%20screen.dart';
 import 'package:d2/user%20profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +17,7 @@ class HomeController extends GetxController {
   }
   // Example function to simulate an action (e.g., onTap behavior)
   void onProfileTapped() {
-   Get.to(()=>ProfileFormPage());
+   Get.to(()=>Displayprofilescreen());
   }
 
   void onSettingsTapped() {

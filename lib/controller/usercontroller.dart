@@ -7,14 +7,6 @@ import 'package:get/get.dart';
 
 
 class PersonalFormController extends GetxController {
-  var name = ''.obs;
-  var contactNumber = ''.obs;
-  var dob = ''.obs;
-  var bloodGroup = ''.obs;
-  var height = ''.obs;
-  var weight = ''.obs;
-  var gender = ''.obs;
-  var location = ''.obs;
 
 
 

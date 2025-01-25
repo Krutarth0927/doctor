@@ -1,110 +1,124 @@
-import 'dart:convert';
-
-import 'package:d2/other/color.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
-import '../controller/usercontroller.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
-class ProfileFormPage extends StatelessWidget {
+// Assuming this is defined elsewhere in your project
+import '../other/color.dart';
+
+
+class PersonalForm extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.primary, // Retain the primary background
-          iconTheme: const IconThemeData(
-              color: AppColors.text), // Set back arrow to white
-          title: const Text(
-            "Profile Details",
-            style: TextStyle(
-                color: AppColors.text), // Title text color set to white
-          ),
-          bottom: const TabBar(
-            indicatorColor: AppColors.text, // Indicator color as white
-            labelColor: AppColors.text, // Active tab text color as white
-            unselectedLabelColor:
-                AppColors.text, // Slightly dimmed for unselected tabs
-            tabs: [
-              Tab(text: "Personal"),
-              Tab(text: "Medical"),
-              Tab(text: "Lifestyle"),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            PersonalForm(),
-            MedicalForm(),
-            LifestyleForm(),
-          ],
-        ),
-      ),
-    );
-  }
+  _PersonalFormState createState() => _PersonalFormState();
 }
 
-// PersonalForm with GetX
-class PersonalForm extends StatelessWidget {
- // final controller = Get.put(PersonalFormController());
- //
- //  TextEditingController name= TextEditingController();
- //  TextEditingController contactNumber= TextEditingController();
- //  TextEditingController dob= TextEditingController();
- //  TextEditingController bloodGroup= TextEditingController();
- //  TextEditingController height= TextEditingController();
- //  TextEditingController weight= TextEditingController();
- //  TextEditingController gender= TextEditingController();
- //  TextEditingController location= TextEditingController();
- //
- //  Future<void> insetred() async{
- //    if(name.text != " "||contactNumber.text != " " || dob.text != " " ||bloodGroup.text != " " || height.text != " " || weight.text != " " || gender.text != " "  || location.text != "")
- //    {
- //      try{
- //        String  uri ="http://localhost/doctor/insert_record.php ";
- //        var  res = await http.post(Uri.parse(uri),body:{
- //          "name" : name.text,
- //          "contactNumber" : contactNumber.text,
- //          "dob" : dob.text,
- //          "bloodGroup" : bloodGroup.text,
- //          "height" : height.text,
- //          "weight" : weight.text,
- //          "gender" : gender.text,
- //          "location" : location.text,
- //        });
- //
- //        var responce = jsonDecode(res.body);
- //
- //        if(responce["success"]=="true"){
- //          print("recoder inserted");
- //          name.text="";
- //          contactNumber.text="";
- //          dob.text="";
- //          bloodGroup.text="";
- //          height.text="";
- //          weight.text="";
- //          gender.text="";
- //          location.text="";
- //
- //        }else{
- //          print("some issuess");
- //        }
- //      }catch(e){
- //        print(e);
- //
- //      }
- //
- //    }else{
- //      print("please fill  all field ");
- //    }
- //  }
+class _PersonalFormState extends State<PersonalForm> {
+  File? _selectedImage;
+  String? _selectedGender;
+  DateTime? _selectedDateOfBirth;
 
+  final TextEditingController name = TextEditingController();
+  final TextEditingController contactNumber = TextEditingController();
+  final TextEditingController dob = TextEditingController();
+  final TextEditingController bloodGroup = TextEditingController();
+  final TextEditingController height = TextEditingController();
+  final TextEditingController weight = TextEditingController();
+  final TextEditingController gender = TextEditingController();
+  final TextEditingController location = TextEditingController();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _pickDateOfBirth(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDateOfBirth = pickedDate;
+        dob.text = "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+      });
+    }
+  }
+
+  InputDecoration _inputDecoration(String labelText) {
+    return InputDecoration(
+      labelText: labelText,
+      border: const OutlineInputBorder(),
+    );
+  }
+
+  Future<void> insertData() async {
+    try {
+      String uri = "https://easydoc.clotheeo.in/apis/insert_user.php";
+      var res = await http.post(Uri.parse(uri), body: {
+        "name": name.text,
+        "phone": contactNumber.text,
+        "dob": dob.text,
+        "blood_group": bloodGroup.text,
+        "height": height.text,
+        "weight": weight.text,
+        "gender": gender.text,
+        "location": location.text,
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["success"] == "true") {
+        print("Record inserted successfully");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data saved successfully!")),
+        );
+        // Clear fields
+        name.clear();
+        contactNumber.clear();
+        dob.clear();
+        bloodGroup.clear();
+        height.clear();
+        weight.clear();
+        gender.clear();
+        location.clear();
+        setState(() {
+          _selectedImage = null;
+          _selectedGender = null;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to insert data.")),
+        );
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred.")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal Form")),
+      appBar: AppBar(
+        leading: InkWell(
+          onTap: () => Get.back(),
+          child: const Icon(Icons.arrow_back, color: AppColors.text),
+        ),
+        backgroundColor: AppColors.primary,
+        title: const Text(
+          "Personal Form",
+          style: TextStyle(color: AppColors.text),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -112,56 +126,102 @@ class PersonalForm extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  TextField(
-                    decoration: const InputDecoration(labelText: "Name"),
-                 //  controller: name,
+                  TextFormField(
+                    controller: name,
+                    decoration: _inputDecoration("Name"),
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: _pickImage,
                     icon: const Icon(Icons.photo),
                     label: const Text("Add Photo"),
                   ),
-                  const SizedBox(height: 10),
+                  if (_selectedImage != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Image.file(
+                        _selectedImage!,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   TextField(
-                    decoration:
-                    const InputDecoration(labelText: "Contact Number"),
+                    controller: contactNumber,
+                    decoration: _inputDecoration("Contact Number"),
                     keyboardType: TextInputType.phone,
-                 //  controller: contactNumber,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: dob,
+                    decoration: _inputDecoration("Date of Birth").copyWith(
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () => _pickDateOfBirth(context),
+                      ),
+                    ),
+                    readOnly: true,
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    decoration:
-                    const InputDecoration(labelText: "Date of Birth"),
-                 //  controller: dob,
+                    controller: bloodGroup,
+                    decoration: _inputDecoration("Blood Group"),
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    decoration: const InputDecoration(labelText: "Blood Group"),
-              // controller: bloodGroup,
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    decoration:
-                    const InputDecoration(labelText: "Height (cm)"),
+                    controller: height,
+                    decoration: _inputDecoration("Height (cm)"),
                     keyboardType: TextInputType.number,
-               //  controller: height,
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    decoration: const InputDecoration(labelText: "Weight (kg)"),
+                    controller: weight,
+                    decoration: _inputDecoration("Weight (kg)"),
                     keyboardType: TextInputType.number,
-                //   controller: weight,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text("Gender:"),
+                  Row(
+                    children: [
+                      Radio<String>(
+                        value: "Male",
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                            gender.text = value!;
+                          });
+                        },
+                      ),
+                      const Text("Male"),
+                      Radio<String>(
+                        value: "Female",
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                            gender.text = value!;
+                          });
+                        },
+                      ),
+                      const Text("Female"),
+                      Radio<String>(
+                        value: "Other",
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                            gender.text = value!;
+                          });
+                        },
+                      ),
+                      const Text("Other"),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    decoration: const InputDecoration(labelText: "Gender"),
-                   //controller: gender,
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    decoration: const InputDecoration(labelText: "Location"),
-                //  controller: location,
+                    controller: location,
+                    decoration: _inputDecoration("Location"),
                   ),
                 ],
               ),
@@ -173,9 +233,7 @@ class PersonalForm extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.text,
                 ),
-                onPressed: (){
-                //  insetred();
-    },
+                onPressed: insertData,
                 child: const Text("Confirm"),
               ),
             ),
@@ -184,159 +242,4 @@ class PersonalForm extends StatelessWidget {
       ),
     );
   }
-}
-
-// MedicalForm with GetX
-class MedicalForm extends StatelessWidget {
-  final controller = Get.put(MedicalFormController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(labelText: "Allergies"),
-                  onChanged: (value) => controller.allergies.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Current Medications"),
-                  onChanged: (value) =>
-                      controller.currentMedications.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Past Medications"),
-                  onChanged: (value) =>
-                      controller.pastMedications.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Chronic Diseases"),
-                  onChanged: (value) =>
-                      controller.chronicDiseases.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration: const InputDecoration(labelText: "Surgeries"),
-                  onChanged: (value) => controller.surgeries.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration: const InputDecoration(labelText: "Injuries"),
-                  onChanged: (value) => controller.injuries.value = value,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.text,
-              ),
-              onPressed: controller.saveDetails,
-              child: const Text("Confirm"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// LifestyleForm with GetX
-class LifestyleForm extends StatelessWidget {
-  final controller = Get.put(LifestyleFormController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(labelText: "Smoking Habit"),
-                  onChanged: (value) => controller.smokingHabit.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Alcohol Consumption"),
-                  onChanged: (value) =>
-                      controller.alcoholConsumption.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration:
-                      const InputDecoration(labelText: "Food Preferences"),
-                  onChanged: (value) =>
-                      controller.foodPreferences.value = value,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration: const InputDecoration(labelText: "Occupation"),
-                  onChanged: (value) => controller.occupation.value = value,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.text,
-              ),
-              onPressed: controller.saveDetails,
-              child: const Text("Confirm"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Profile")),
-      body: Center(
-        child: CircleAvatar(
-          radius: 30,
-          backgroundColor: AppColors.primary,
-          child: IconButton(
-            icon:
-                const Icon(Icons.account_circle, size: 50, color: AppColors.text),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileFormPage()),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: ProfilePage(),
-  ));
 }

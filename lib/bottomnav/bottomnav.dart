@@ -1,4 +1,5 @@
 import 'package:d2/other/color.dart';
+import 'package:d2/user%20profile/displayprofile%20screen.dart';
 import 'package:d2/user/home.dart';
 import 'package:flutter/material.dart';
 import '../doctor category/doctorbooking.dart';
@@ -32,7 +33,7 @@ class _BottomNavExampleState extends State<BottomNavExample> {
     HomePage(),
     doctorca(),
     DoctorBookingPage(),
-    ProfileFormPage(),
+    Displayprofilescreen(),
 
   ];
 
