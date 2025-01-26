@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../other/color.dart';
 
+import 'package:http/http.dart' as http;
 class DoctorBookingPage extends StatefulWidget {
   final doctorId;
 
@@ -11,11 +12,17 @@ class DoctorBookingPage extends StatefulWidget {
 
   @override
   _DoctorBookingPageState createState() => _DoctorBookingPageState();
+
+
 }
 
 class _DoctorBookingPageState extends State<DoctorBookingPage> {
   DateTime selectedDate = DateTime.now();
   String? selectedTimeSlot;
+
+  //init state karto kb !!!!!!!!!!!!!!!!!!!!!!!1
+
+
 
   // List of available time slots
   List<String> timeSlots = [
@@ -41,6 +48,13 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     "Jonathan Patterson": [],
   };
 
+
+  @override
+  void initState() {
+    super.initState();
+    // getSlots();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,4 +276,12 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
       },
     );
   }
+
+  // void getSlots() async{
+  //   Uri url  = Uri.parse("https://easydoc.clotheeo.in/apis/allslots.php");
+  //   var response = await http.post(url);
+  //
+  //   print(response.body);
+  // }
+
 }

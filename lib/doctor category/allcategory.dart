@@ -85,7 +85,7 @@ class AllDoctorCategoriesPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 5.0),
             child: ElevatedButton(
               onPressed: () async {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CategotywicseDoctors(category: title),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CategorywiseDoctors(category: title),));
               // //  final response = await fetchDoctors(title);
               //   if (response != null) {
               //
