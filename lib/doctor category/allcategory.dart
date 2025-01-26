@@ -32,7 +32,7 @@ class AllDoctorCategoriesPage extends StatelessWidget {
           padding: EdgeInsets.all(screenWidth * 0.05),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: screenWidth > 500 ? 3 : 2,
-            crossAxisSpacing: screenWidth * 0.08,
+            crossAxisSpacing: screenWidth * 0.07,
             mainAxisSpacing: screenHeight * 0.02,
             childAspectRatio: screenWidth > 600 ? 0.9 : 0.8,
           ),
