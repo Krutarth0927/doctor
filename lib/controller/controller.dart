@@ -56,10 +56,10 @@ class HomeController extends GetxController {
     {"title": "Pathology", "image": "assets/categories/Pathology.png"},
     {"title": "Family Physicians", "image": "assets/categories/Family_Physicians.png"},
     {"title": "Nephrologists", "image": "assets/categories/Nephrologist.png"},
-{"title": "Gynecologists", "image": "assets/categories/Nephrologist.png"},
-    {"title": "Plastic Surgeons", "image": "assets/categories/Nephrologist.png"},
-{"title": "General Surgeons", "image": "assets/categories/Nephrologist.png"},
-{"title": "Urologists", "image": "assets/categories/Nephrologist.png"},
+{"title": "Gynecologists", "image": "assets/categories/Gynecologists.png"},
+    {"title": "Plastic Surgeons", "image": "assets/categories/Plastic_Surgeons.png"},
+{"title": "General Surgeons", "image": "assets/categories/General_Surgeons.png"},
+{"title": "Urologists", "image": "assets/categories/Urologists.png"},
 
 
   ].obs;

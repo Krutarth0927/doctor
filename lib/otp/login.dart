@@ -54,7 +54,7 @@ class _LoginState extends State<login> {
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: size.width * 0.03,
-                      vertical: size.height * 0.015,
+                      vertical: size.height * 0.021,
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.textPrimary),
