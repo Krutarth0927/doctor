@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:d2/Payment/payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -259,7 +260,9 @@ class _HomePageState extends State<HomePage> {
             _buildDrawerItem(
                 Icons.alarm, "Reminder", () => controller.onReminderTapped()),
             _buildDrawerItem(Icons.person_outline, "My Doctors", () {}),
-            _buildDrawerItem(Icons.payment, "Payment", () {}),
+            _buildDrawerItem(Icons.payment, "Payment", () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Payment()));
+            }),
             ExpansionTile(
               leading: const Icon(Icons.settings, color: AppColors.textPrimary),
               title: const Text("Settings",

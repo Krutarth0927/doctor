@@ -211,7 +211,7 @@ class OTPScreen extends StatelessWidget {
                       .map((controller) => controller.text)
                       .join();
                   print("Entered OTP: $otp");
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
                 },
                 child: Text(
                   "Continue",

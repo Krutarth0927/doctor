@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -251,84 +252,114 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
   }
 
 
-  void _confirmBooking(BuildContext context , String doctorName) {
+
+  void _confirmBooking(BuildContext context, String doctorName) {
+    String? uploadedFileName; // To store the selected file name
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Confirm Booking"),
-          content:
-          Column(
-            children: [
-              Text(
-                "Doctor: $doctorName\n"
-                    "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
-                    "Time: $selectedTimeSlot \n",),
-
+        return StatefulBuilder( // Use StatefulBuilder to manage the dialog's state
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Confirm Booking"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min, // Adjust size for better layout
+                children: [
+                  Text(
+                    "Doctor: $doctorName\n"
+                        "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
+                        "Time: $selectedTimeSlot \n",
+                  ),
                   Row(
                     children: [
-                    Radio<String>(
-                    value: 'old',
-                    groupValue: _oldNew,
-                    onChanged: (value) {
-                        setState(() {
-                          _oldNew = value!;
-                          print(value);
-                        });
-                    },
+                      Radio<String>(
+                        value: 'old',
+                        groupValue: _oldNew,
+                        onChanged: (value) {
+                          setState(() {
+                            _oldNew = value!;
+                          });
+                        },
+                      ),
+                      const Text("Old Patient"),
+                      Radio<String>(
+                        value: 'new',
+                        groupValue: _oldNew,
+                        onChanged: (value) {
+                          setState(() {
+                            _oldNew = value!;
+                          });
+                        },
+                      ),
+                      const Text("New Patient"),
+                    ],
                   ),
-
-
-                  const Text("Old Patient"),
-
-                  Radio<String>(
-                  value: 'new',
-                  groupValue: _oldNew,
-                  onChanged: (value) {
-
-                    setState(() {
-                          _oldNew = value!;
-                          print(value);
-                    });
-
-                  },
-                  ),
-
-
-                  const Text("New Patient"),
-
+                  if (_oldNew == 'old') // Display document upload field for "Old Patient"
+                    Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: "Upload Document",
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.upload_file),
+                              onPressed: () async {
+                                // File Picker logic
+                                FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['pdf', 'doc', 'docx', 'jpg', 'png'],
+                                );
+                                if (result != null) {
+                                  setState(() {
+                                    uploadedFileName = result.files.single.name;
+                                  });
+                                  print("Selected file: ${result.files.single.name}");
+                                } else {
+                                  print("File selection canceled");
+                                }
+                              },
+                            ),
+                          ),
+                          readOnly: true, // Make the text box read-only
+                          controller: TextEditingController(
+                            text: uploadedFileName ?? "No file selected",
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
-
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  bookedSlots[doctorName] = bookedSlots[doctorName] ?? [];
-                  bookedSlots[doctorName]!.add(selectedTimeSlot!);
-                  // selectedTimeSlot = null;
-                });
-                Navigator.pop(context);
-                print('slotBookrf');
-
-              },
-              child: const Text("Confirm"),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary
+                ),
+                  onPressed: () {
+                    setState(() {
+                      bookedSlots[doctorName] = bookedSlots[doctorName] ?? [];
+                      bookedSlots[doctorName]!.add(selectedTimeSlot!);
+                    });
+                    Navigator.pop(context);
+                    print('Slot Booked');
+                  },
+                  child: const Text("Confirm",style: TextStyle(color: AppColors.text),),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
+
 
   void getSlots({required var selectDate}) async{
     _isLoading= true;
