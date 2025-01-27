@@ -42,7 +42,9 @@ class _CategorywiseDoctorsState extends State<CategorywiseDoctors> {
 
           return InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>DoctorBookingPage(doctorId: alldoctor[index]['ID'],)));
+              // print("-=================");
+              // print(alldoctor[index]);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>DoctorBookingPage(doctorId: alldoctor[index],)));
             },
             child: Card(
               margin: const EdgeInsets.all(8.0),

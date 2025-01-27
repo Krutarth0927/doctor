@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -5,7 +7,7 @@ import '../other/color.dart';
 
 import 'package:http/http.dart' as http;
 class DoctorBookingPage extends StatefulWidget {
-  final doctorId;
+  var doctorId;
 
   // Constructor to accept the doctor ID
   DoctorBookingPage({required this.doctorId});
@@ -17,60 +19,67 @@ class DoctorBookingPage extends StatefulWidget {
 }
 
 class _DoctorBookingPageState extends State<DoctorBookingPage> {
+  @override
+  void initState() {
+    super.initState();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    getSlots(selectDate: formattedDate);
+
+  }
+  var _oldNew = "old";
+  TextEditingController oldnewController = TextEditingController();
+  var _value = null;
+  bool _isLoading=false;
   DateTime selectedDate = DateTime.now();
   String? selectedTimeSlot;
-
-  //init state karto kb !!!!!!!!!!!!!!!!!!!!!!!1
-
+  var slotsAvailable =[];
 
 
   // List of available time slots
-  List<String> timeSlots = [
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-  ];
+  // List<String> timeSlots = [
+  //   "09:00",
+  //   "09:30",
+  //   "10:00",
+  //   "10:30",
+  //   "11:00",
+  //   "11:30",
+  //   "12:00",
+  //   "13:30",
+  //   "14:00",
+  //   "14:30",
+  //   "15:00",
+  //   "15:30",
+  //   "16:00",
+  //   "16:30",
+  // ];
 
   // Map to track booked slots for each doctor
+
   Map<String, List<String>> bookedSlots = {
     "Olivia Wilson": [],
     "Jonathan Patterson": [],
   };
 
 
-  @override
-  void initState() {
-    super.initState();
-    // getSlots();
 
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Doctor ID: ${widget.doctorId}',
-        style: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
+        title: Text('Doctor ID: ${widget.doctorId["ID"]}',
+          style: TextStyle(color: AppColors.text, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.text),
         elevation: 1,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(slotsAvailable.length.toString()),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               child: Column(
@@ -99,16 +108,13 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
             ),
             Divider(height: 1, color: Colors.grey[300]),
             _buildDoctorCard(
-              "Olivia Wilson",
-              "Consultant - Physiotherapy",
+              context,
+              widget.doctorId['name'],
+              widget.doctorId['category'],
               "assets/hospital/2.jpg",
             ),
             Divider(height: 1, color: Colors.grey[300]),
-            _buildDoctorCard(
-              "Jonathan Patterson",
-              "Consultant - Physiotherapy",
-              "assets/hospital/2.jpg",
-            ),
+
           ],
         ),
       ),
@@ -116,6 +122,7 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
   }
 
   Widget _buildDateRow() {
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(7, (index) {
@@ -126,6 +133,10 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
           onTap: () {
             setState(() {
               selectedDate = day;
+              String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+              print(formattedDate);
+              getSlots(selectDate: formattedDate);
+
             });
           },
           child: Column(
@@ -161,7 +172,7 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     );
   }
 
-  Widget _buildDoctorCard(String name, String specialty, String imagePath) {
+  Widget _buildDoctorCard(BuildContext c, String name, String specialty, String imagePath) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -193,33 +204,36 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
           const SizedBox(height: 16),
           Wrap(
             spacing: 8,
-            children: timeSlots.map((slot) {
-              // Check if the slot is booked for this specific doctor
-              bool isBooked = bookedSlots[name]?.contains(slot) ?? true;
+            children:
+            List.generate(
+              slotsAvailable.length, (int index) {
+                return ChoiceChip(
+                  padding: EdgeInsets.all(8),
+                  label: Text(' ${slotsAvailable[index]['time']}'),
 
-              return ChoiceChip(
-                label: Text(slot),
-                selected: selectedTimeSlot == slot && !isBooked,
-                onSelected: isBooked
-                    ? null // Disable chip if booked
-                    : (selected) {
-                  setState(() {
-                    selectedTimeSlot = selected ? slot : null;
-                  });
-                },
-                selectedColor: AppColors.accent,
-                backgroundColor:
-                isBooked ? AppColors.textSecondary : Colors.grey[200],
-              );
-            }).toList(),
+                  selectedColor: Colors.green,
+
+                  selected: _value == index,
+
+
+                  onSelected: (bool selected) {
+                    setState(() {
+                      _value = selected ? index : null;
+                      selectedTimeSlot = slotsAvailable[index]['time'];
+                    });
+                  },
+                );
+              },
+            ).toList(),
+
           ),
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
-              onPressed: selectedTimeSlot != null
+              onPressed: _value != null
                   ? () {
-                _confirmBooking(name);
+                _confirmBooking(c,name);
               }
                   : null,
               child: const Text(
@@ -237,17 +251,59 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
   }
 
 
-  void _confirmBooking(String doctorName) {
+  void _confirmBooking(BuildContext context , String doctorName) {
+
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text("Confirm Booking"),
-          content: Text(
-            "Doctor: $doctorName\n"
-                "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
-                "Time: $selectedTimeSlot",
+          content:
+          Column(
+            children: [
+              Text(
+                "Doctor: $doctorName\n"
+                    "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
+                    "Time: $selectedTimeSlot \n",),
+
+                  Row(
+                    children: [
+                    Radio<String>(
+                    value: 'old',
+                    groupValue: _oldNew,
+                    onChanged: (value) {
+                        setState(() {
+                          _oldNew = value!;
+                          print(value);
+                        });
+                    },
+                  ),
+
+
+                  const Text("Old Patient"),
+
+                  Radio<String>(
+                  value: 'new',
+                  groupValue: _oldNew,
+                  onChanged: (value) {
+
+                    setState(() {
+                          _oldNew = value!;
+                          print(value);
+                    });
+
+                  },
+                  ),
+
+
+                  const Text("New Patient"),
+
+                ],
+              ),
+
+            ],
           ),
+
           actions: [
             TextButton(
               onPressed: () {
@@ -260,14 +316,11 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
                 setState(() {
                   bookedSlots[doctorName] = bookedSlots[doctorName] ?? [];
                   bookedSlots[doctorName]!.add(selectedTimeSlot!);
-                  selectedTimeSlot = null;
+                  // selectedTimeSlot = null;
                 });
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Booking Confirmed!"),
-                  ),
-                );
+                print('slotBookrf');
+
               },
               child: const Text("Confirm"),
             ),
@@ -277,11 +330,25 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     );
   }
 
-  // void getSlots() async{
-  //   Uri url  = Uri.parse("https://easydoc.clotheeo.in/apis/allslots.php");
-  //   var response = await http.post(url);
-  //
-  //   print(response.body);
-  // }
+  void getSlots({required var selectDate}) async{
+    _isLoading= true;
+    Uri urlSecond  = Uri.parse("https://easydoc.clotheeo.in/apis/check_slot_available.php");
+
+    var responseSecond = await http.post(urlSecond,body: jsonEncode({
+      "did" : widget.doctorId["ID"],
+      "date" : selectDate.toString()
+    }));
+
+    // print(responseSecond.body);
+    var alldata = jsonDecode(responseSecond.body);
+
+
+    setState(() {
+      _isLoading= false;
+       slotsAvailable = alldata['data'];
+      print(slotsAvailable);
+    });
+
+  }
 
 }
