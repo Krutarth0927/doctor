@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '365442424779',
     projectId: 'doctor-d2',
     authDomain: 'doctor-d2.firebaseapp.com',
+    databaseURL: 'https://doctor-d2-default-rtdb.firebaseio.com',
     storageBucket: 'doctor-d2.firebasestorage.app',
     measurementId: 'G-3JTTTREQ6X',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:365442424779:android:02f109616e156a255c604e',
     messagingSenderId: '365442424779',
     projectId: 'doctor-d2',
+    databaseURL: 'https://doctor-d2-default-rtdb.firebaseio.com',
     storageBucket: 'doctor-d2.firebasestorage.app',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:365442424779:ios:807e4fdb00a5b5075c604e',
     messagingSenderId: '365442424779',
     projectId: 'doctor-d2',
+    databaseURL: 'https://doctor-d2-default-rtdb.firebaseio.com',
     storageBucket: 'doctor-d2.firebasestorage.app',
     iosBundleId: 'com.example.d2',
   );
@@ -72,6 +75,7 @@ class DefaultFirebaseOptions {
     appId: '1:365442424779:ios:807e4fdb00a5b5075c604e',
     messagingSenderId: '365442424779',
     projectId: 'doctor-d2',
+    databaseURL: 'https://doctor-d2-default-rtdb.firebaseio.com',
     storageBucket: 'doctor-d2.firebasestorage.app',
     iosBundleId: 'com.example.d2',
   );
@@ -82,7 +86,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '365442424779',
     projectId: 'doctor-d2',
     authDomain: 'doctor-d2.firebaseapp.com',
+    databaseURL: 'https://doctor-d2-default-rtdb.firebaseio.com',
     storageBucket: 'doctor-d2.firebasestorage.app',
     measurementId: 'G-6FPPW8KTSF',
   );
+
 }

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../other/color.dart';
+import 'package:http/http.dart' as http;
 
 class Displayprofilescreen extends StatefulWidget {
   const Displayprofilescreen({super.key});
@@ -11,17 +14,27 @@ class Displayprofilescreen extends StatefulWidget {
 }
 
 class _DisplayProfileScreenState extends State<Displayprofilescreen> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController contactController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-  final TextEditingController bloodGroupController = TextEditingController();
-  final TextEditingController heightController = TextEditingController();
-  final TextEditingController weightController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+
+  var isLoading = false;
+
+   TextEditingController nameController = TextEditingController();
+   TextEditingController contactController = TextEditingController();
+   TextEditingController dobController = TextEditingController();
+   TextEditingController bloodGroupController = TextEditingController();
+   TextEditingController heightController = TextEditingController();
+   TextEditingController weightController = TextEditingController();
+   TextEditingController genderController = TextEditingController();
+   TextEditingController locationController = TextEditingController();
+
+
+  @override
+  void initState() {
+    fetchUser();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -34,7 +47,7 @@ class _DisplayProfileScreenState extends State<Displayprofilescreen> {
           style: TextStyle(color: AppColors.text),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading ? Center(child: CircularProgressIndicator()) :SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +132,7 @@ class _DisplayProfileScreenState extends State<Displayprofilescreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Handle the update functionality here
-                  print("Profile Updated");
+                  updateProfile();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -134,5 +147,64 @@ class _DisplayProfileScreenState extends State<Displayprofilescreen> {
         ),
       ),
     );
+  }
+  void fetchUser() async{
+    isLoading = true;
+     Uri url = Uri.parse("https://easydoc.clotheeo.in/apis/get_user_profile.php");
+     var response = await http.post(url,body: jsonEncode({
+         "id": 1
+     }));
+
+     // print(response.body);
+     if(response.statusCode==200) {
+       var responsebody = json.decode(response.body);
+
+       var data = responsebody['data'];
+
+       nameController.text = data[0]['name'];
+
+       contactController.text = data[0]['phone'];
+       dobController.text = data[0]['dob'];
+       bloodGroupController.text = data[0]['blood_group'];
+       heightController.text = data[0]['height'];
+       weightController.text = data[0]['weight'];
+       genderController.text = data[0]['gender'];
+       locationController.text = data[0]['location'];
+       setState(() {
+
+       });
+     }
+     else{
+       "not data";
+     }
+     isLoading = false;
+
+}
+
+  void updateProfile()async{
+
+    isLoading = true;
+    Uri uri  = Uri.parse("https://easydoc.clotheeo.in/apis/update_user.php");
+    final response = await http.post(uri,body: jsonEncode({
+        "id": 1,
+        "password": "newPassword123",
+        "name": "Jagdishm",
+        "phone": "1234567890",
+        "dob": "1990-01-01",
+        "blood_group": "O+",
+        "height": 175,
+        "weight": 70,
+        "gender": "Male",
+        "location": "New York"
+    }));
+
+        if(response.statusCode==201){
+      fetchUser();
+    }
+
+    isLoading = false;
+    setState(() {
+
+    });
   }
 }

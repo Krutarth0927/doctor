@@ -319,7 +319,7 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
                   // selectedTimeSlot = null;
                 });
                 Navigator.pop(context);
-                print('slotBookrf');
+                bookSlot();
 
               },
               child: const Text("Confirm"),
@@ -349,6 +349,33 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
       print(slotsAvailable);
     });
 
+  }
+  
+  void bookSlot() async{
+    _isLoading = true;
+    Uri uri = Uri.parse("https://easydoc.clotheeo.in/apis/slot_booking.php");
+    final response = await http.post(uri,body: jsonEncode(
+        {
+          "did":"1",
+          "sid":"1",
+          "uid":"2",
+          "diseases":"cold",
+          "oldnew":1,
+          "dateofbooking":"2025-01-28"
+        }
+    ));
+    // print(response.body);
+    print(response.statusCode);
+    if(response.statusCode == 200){
+      bookSlot();
+    }
+    else{
+      print('not booked');
+    }
+    _isLoading = false;
+    setState(() {
+
+    });
   }
 
 }

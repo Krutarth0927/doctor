@@ -1,4 +1,5 @@
 import 'package:d2/bottomnav/bottomnav.dart';
+import 'package:d2/otp/PhoneAuth.dart';
 import 'package:d2/otp/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class SplashScreen extends StatelessWidget {
                       right: screenWidth * 0.2,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>login()));
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
 
                         },
                         child: Container(

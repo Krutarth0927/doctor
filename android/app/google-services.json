@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "365442424779",
+    "firebase_url": "https://doctor-d2-default-rtdb.firebaseio.com",
     "project_id": "doctor-d2",
     "storage_bucket": "doctor-d2.firebasestorage.app"
   },

@@ -1,7 +1,10 @@
 import 'package:d2/bottomnav/bottomnav.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:d2/other/color.dart';
+
 
 import '../user profile/profile.dart';
 
@@ -96,14 +99,31 @@ class _LoginState extends State<login> {
                   backgroundColor: AppColors.primary,
                   minimumSize: Size(double.infinity, size.height * 0.07),
                 ),
-                onPressed: () {
-                  print("Phone Number: ${_phoneController.text}");
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) =>
-                            OTPScreen(phone: _phoneController.text)),
-                  );
+                onPressed: () async{
+                  try {
+                    FirebaseAuth.instance.verifyPhoneNumber(
+                        verificationCompleted: (
+                            PhoneAuthCredential credential) {},
+                        verificationFailed: (FirebaseAuthException ex) {},
+                        codeSent: (String verificationid, int? resendtoken) {
+                          Navigator.push(context, MaterialPageRoute(builder: (
+                              context) =>
+                              OTPScreen(verificationid: verificationid,
+                                phone: _phoneController.text.toString(),)));
+                        },
+                        codeAutoRetrievalTimeout: (String verificationid) {},
+                        phoneNumber: _phoneController.text.toString());
+
+                    print("Phone Number: ${_phoneController.text}");
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (_) =>
+                    //           OTPScreen(phone: _phoneController.text, verificationid: '',)),
+                    // );
+                  }catch(e){
+                    print(e.toString());
+                  }
                 },
                 child: Text(
 
@@ -122,9 +142,10 @@ class _LoginState extends State<login> {
 
 class OTPScreen extends StatelessWidget {
   final String phone;
-  OTPScreen({required this.phone});
+  String verificationid;
+  OTPScreen({required this.phone,required this.verificationid});
 
-  final List<TextEditingController> _otpControllers =
+  final List<TextEditingController> _otpController =
       List.generate(6, (index) => TextEditingController());
 
   // @override
@@ -177,7 +198,7 @@ class OTPScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: TextField(
-                        controller: _otpControllers[index],
+                        controller: _otpController[index],
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
                         maxLength: 1,
@@ -206,12 +227,27 @@ class OTPScreen extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   minimumSize: Size(double.infinity, size.height * 0.05),
                 ),
-                onPressed: () {
-                  String otp = _otpControllers
-                      .map((controller) => controller.text)
-                      .join();
-                  print("Entered OTP: $otp");
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
+                onPressed: () async {
+
+                  try{
+                    String otp = _otpController
+                        .map((controller) => controller.text)
+                        .join();
+                    PhoneAuthCredential credential = await PhoneAuthProvider.credential(verificationId: verificationid, smsCode: otp);
+                    FirebaseAuth.instance.signInWithCredential(credential)
+                    .then((val){
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
+                    });
+
+                  }catch(e){
+
+                    print(e.toString());
+                  }
+
+
+
+                  // print("Entered OTP: $otp");
+                  // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
                 },
                 child: Text(
                   "Continue",
