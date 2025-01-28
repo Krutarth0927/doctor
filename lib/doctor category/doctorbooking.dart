@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:d2/bottomnav/bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -367,7 +368,11 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     // print(response.body);
     print(response.statusCode);
     if(response.statusCode == 200){
-      bookSlot();
+      //Navidate to Dashboard
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Slot booked Successfully"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>bottomnav()));
+
     }
     else{
       print('not booked');
