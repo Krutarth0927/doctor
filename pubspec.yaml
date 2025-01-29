@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: '>=3.3.4 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -44,10 +44,6 @@ dependencies:
   firebase_core: ^2.19.0
   carousel_slider:
   http: ^0.13.3
-  razorpay_flutter:
-  fluttertoast:
-  firebase_auth:
-  file_picker:
 
 dev_dependencies:
   flutter_test:

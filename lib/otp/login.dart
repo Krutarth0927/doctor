@@ -54,7 +54,7 @@ class _LoginState extends State<login> {
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: size.width * 0.03,
-                      vertical: size.height * 0.021,
+                      vertical: size.height * 0.015,
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.textPrimary),
@@ -211,7 +211,7 @@ class OTPScreen extends StatelessWidget {
                       .map((controller) => controller.text)
                       .join();
                   print("Entered OTP: $otp");
-                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
                 },
                 child: Text(
                   "Continue",
