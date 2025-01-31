@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:d2/bottomnav/bottomnav.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -26,15 +27,22 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     getSlots(selectDate: formattedDate);
+    uploadedFileName=null;
 
   }
+  String? uploadedFileName; // To store the selected file name
   var _oldNew = "old";
   TextEditingController oldnewController = TextEditingController();
   var _value = null;
   bool _isLoading=false;
   DateTime selectedDate = DateTime.now();
   String? selectedTimeSlot;
+  String? selectedTimeSlotID;
+
   var slotsAvailable =[];
+
+  TextEditingController doctorid = TextEditingController();
+
 
 
   // List of available time slots
@@ -57,10 +65,18 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
 
   // Map to track booked slots for each doctor
 
-  Map<String, List<String>> bookedSlots = {
-    "Olivia Wilson": [],
-    "Jonathan Patterson": [],
-  };
+
+  // "sid":"1",
+  // "uid":"2",
+  // "diseases":"cold",
+  // "oldnew":1,
+  // "dateofbooking":"2025-01-28",
+  // "filename":"filename"
+
+  // Map<String, List<String>> bookedSlots = {
+  //   "Olivia Wilson": [],
+  //   "Jonathan Patterson": [],
+  // };
 
 
 
@@ -208,23 +224,24 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
             children:
             List.generate(
               slotsAvailable.length, (int index) {
-                return ChoiceChip(
-                  padding: EdgeInsets.all(8),
-                  label: Text(' ${slotsAvailable[index]['time']}'),
+              return ChoiceChip(
+                padding: EdgeInsets.all(8),
+                label: Text(' ${slotsAvailable[index]['time']}'),
 
-                  selectedColor: Colors.green,
+                selectedColor: Colors.green,
 
-                  selected: _value == index,
+                selected: _value == index,
 
 
-                  onSelected: (bool selected) {
-                    setState(() {
-                      _value = selected ? index : null;
-                      selectedTimeSlot = slotsAvailable[index]['time'];
-                    });
-                  },
-                );
-              },
+                onSelected: (bool selected) {
+                  setState(() {
+                    _value = selected ? index : null;
+                    selectedTimeSlot = slotsAvailable[index]['time'];
+                    selectedTimeSlotID=slotsAvailable[index]['sid'];
+                  });
+                },
+              );
+            },
             ).toList(),
 
           ),
@@ -233,8 +250,8 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: _value != null
-                  ? () {
-                _confirmBooking(c,name);
+                  ? () { uploadedFileName=null;
+              _confirmBooking(c,name);
               }
                   : null,
               child: const Text(
@@ -251,81 +268,108 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
     );
   }
 
+  void _confirmBooking(BuildContext context, String doctorName) {
 
-  void _confirmBooking(BuildContext context , String doctorName) {
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Confirm Booking"),
-          content:
-          Column(
-            children: [
-              Text(
-                "Doctor: $doctorName\n"
-                    "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
-                    "Time: $selectedTimeSlot \n",),
-
+        return StatefulBuilder( // Use StatefulBuilder to manage the dialog's state
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Confirm Booking"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min, // Adjust size for better layout
+                children: [
+                  Text(
+                    "Doctor: $doctorName\n"
+                        "Date: ${DateFormat('yyyy-MM-dd').format(selectedDate)}\n"
+                        "Time: $selectedTimeSlot \n",
+                  ),
                   Row(
                     children: [
-                    Radio<String>(
-                    value: 'old',
-                    groupValue: _oldNew,
-                    onChanged: (value) {
-                        setState(() {
-                          _oldNew = value!;
-                          print(value);
-                        });
-                    },
+                      Radio<String>(
+                        value: 'old',
+                        groupValue: _oldNew,
+                        onChanged: (value) {
+                          setState(() {
+                            _oldNew = value!;
+                          });
+                        },
+                      ),
+                      const Text("Old Patient"),
+                      Radio<String>(
+                        value: 'new',
+                        groupValue: _oldNew,
+                        onChanged: (value) {
+                          setState(() {
+                            _oldNew = value!;
+                          });
+                        },
+                      ),
+                      const Text("New Patient"),
+                    ],
                   ),
+                  if (_oldNew == 'old') // Display document upload field for "Old Patient"
+                    Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: "Upload Document",
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.upload_file),
+                              onPressed: () async {
 
-
-                  const Text("Old Patient"),
-
-                  Radio<String>(
-                  value: 'new',
-                  groupValue: _oldNew,
-                  onChanged: (value) {
-
-                    setState(() {
-                          _oldNew = value!;
-                          print(value);
-                    });
-
-                  },
-                  ),
-
-
-                  const Text("New Patient"),
-
+                                // File Picker logic
+                                FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['pdf', 'doc', 'docx', 'jpg', 'png'],
+                                );
+                                if (result != null) {
+                                  setState(() {
+                                    uploadedFileName = result.files.single.name;
+                                  });
+                                  print("Selected file: ${result.files.single.name}");
+                                } else {
+                                  print("File selection canceled");
+                                }
+                              },
+                            ),
+                          ),
+                          readOnly: true, // Make the text box read-only
+                          controller: TextEditingController(
+                            text: uploadedFileName ?? "No file selected",
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    uploadedFileName=null;
+                    Navigator.pop(context);
 
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  bookedSlots[doctorName] = bookedSlots[doctorName] ?? [];
-                  bookedSlots[doctorName]!.add(selectedTimeSlot!);
-                  // selectedTimeSlot = null;
-                });
-                Navigator.pop(context);
-                bookSlot();
-
-              },
-              child: const Text("Confirm"),
-            ),
-          ],
+                  },
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary
+                ),
+                  onPressed: () {
+                    bookSlot();
+                    Navigator.pop(context);
+                    print('Slot Booked');
+                  },
+                  child: const Text("Confirm",style: TextStyle(color: AppColors.text),),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -346,26 +390,30 @@ class _DoctorBookingPageState extends State<DoctorBookingPage> {
 
     setState(() {
       _isLoading= false;
-       slotsAvailable = alldata['data'];
+      slotsAvailable = alldata['data'];
       print(slotsAvailable);
     });
 
   }
-  
+
   void bookSlot() async{
+    print("""---------------------
+    ${widget.doctorId['ID']},${_value+1},${_oldNew},${DateFormat('yyyy-MM-dd').format(selectedDate)},${uploadedFileName.toString()}
+    """);
     _isLoading = true;
     Uri uri = Uri.parse("https://easydoc.clotheeo.in/apis/slot_booking.php");
     final response = await http.post(uri,body: jsonEncode(
         {
-          "did":"1",
-          "sid":"1",
-          "uid":"2",
+          "did":widget.doctorId['ID'],
+          "sid":selectedTimeSlotID,
+          "uid":2,
           "diseases":"cold",
-          "oldnew":1,
-          "dateofbooking":"2025-01-28"
+          "oldnew":_oldNew,
+          "dateofbooking":DateFormat('yyyy-MM-dd').format(selectedDate),
+          "filename":uploadedFileName.toString() != null ? uploadedFileName.toString() :null
         }
     ));
-    // print(response.body);
+    print(response.body);
     print(response.statusCode);
     if(response.statusCode == 200){
       //Navidate to Dashboard

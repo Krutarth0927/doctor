@@ -421,32 +421,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              hospital["type"] ?? "Unknown Type",
+                            ' Phone : ${hospital["phone"] ?? "Unknown Type"}',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orange,
-                                  size: 14,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  hospital["rating"]?.toString() ?? "N/A",
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "${hospital["reviews"] ?? 0} reviews",
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ],
-                            ),
+
                           ],
                         ),
                       ),

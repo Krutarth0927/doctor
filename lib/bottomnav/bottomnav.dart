@@ -22,6 +22,7 @@ class bottomnav extends StatelessWidget {
 
 
 class BottomNavExample extends StatefulWidget {
+
   @override
   _BottomNavExampleState createState() => _BottomNavExampleState();
 }
@@ -32,9 +33,9 @@ class _BottomNavExampleState extends State<BottomNavExample> {
   final List<Widget> _pages = [
     HomePage(),
     doctorca(),
-    // DoctorBookingPage(),
+    // DoctorBookingPage(doctorId:doctor['ID'] ,),
      Displayprofilescreen(),
-    Displayprofilescreen(),
+
 
   ];
 
@@ -61,7 +62,7 @@ class _BottomNavExampleState extends State<BottomNavExample> {
           ),
           const BottomNavigationBarItem(
             icon: ImageIcon(AssetImage('assets/categories/stethoscope.png')),
-            label: 'Doctor',
+            label: 'Hospital',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.book_online),

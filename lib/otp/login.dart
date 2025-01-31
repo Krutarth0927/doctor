@@ -236,7 +236,7 @@ class OTPScreen extends StatelessWidget {
                     PhoneAuthCredential credential = await PhoneAuthProvider.credential(verificationId: verificationid, smsCode: otp);
                     FirebaseAuth.instance.signInWithCredential(credential)
                     .then((val){
-                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>bottomnav()));
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PersonalForm()));
                     });
 
                   }catch(e){

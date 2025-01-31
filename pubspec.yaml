@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.4 <4.0.0'
+  sdk: '>=3.3.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,6 +45,16 @@ dependencies:
   carousel_slider:
   http: ^0.13.3
   firebase_auth: ^4.16.0
+  file_picker:
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/The easy Care Logo-Photoroom.png"
+  adaptive_icon_background: "assets/The easy Care Logo-Photoroom.png"
+  adaptive_icon_foreground: "assets/The easy Care Logo-Photoroom.png"
+
 
 dev_dependencies:
   flutter_test:
